@@ -15,9 +15,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.zukkadev.it.flickrtourist.data.AppDatabase;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
 
+    private AppDatabase mDb;
     private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
