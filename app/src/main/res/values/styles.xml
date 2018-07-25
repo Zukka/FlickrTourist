@@ -23,6 +23,10 @@
         <item name="android:textSize">36sp</item>
     </style>
 
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
+    </style>
+
     <style name="ThemeOverlay.MyTextDetail" parent="AppTheme">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

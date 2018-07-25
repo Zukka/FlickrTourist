@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                         //   updateUI(user);
+                            showMapActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-                        showMapActivity();
                     }
                 });
     }
@@ -169,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
             findViewById(R.id.email_password_fields).setVisibility(View.GONE);
             findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
-
             findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
+            showMapActivity();
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void showMapActivity() {
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
 }
