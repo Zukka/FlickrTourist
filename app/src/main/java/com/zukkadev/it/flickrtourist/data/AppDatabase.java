@@ -6,9 +6,9 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.zukkadev.it.flickrtourist.model.FlickrImages;
-import com.zukkadev.it.flickrtourist.model.Pins;
+import com.zukkadev.it.flickrtourist.model.Pin;
 
-@Database(entities = {FlickrImages.class, Pins.class}, version = 1, exportSchema = false)
+@Database(entities = {FlickrImages.class, Pin.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final Object LOCK = new Object();

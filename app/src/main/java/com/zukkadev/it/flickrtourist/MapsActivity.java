@@ -1,9 +1,9 @@
 package com.zukkadev.it.flickrtourist;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +16,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zukkadev.it.flickrtourist.data.AppDatabase;
+import com.zukkadev.it.flickrtourist.model.Pin;
+import com.zukkadev.it.flickrtourist.network.FlickrNetwork;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.support.v7.app.AlertDialog.*;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -31,16 +38,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
     }
 
- /*   @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
-*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
@@ -61,7 +58,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void clearAllPins() {
-        mMap.clear();
+        Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new Builder(this);
+        }
+        builder.setTitle(getString(R.string.alert_remove_all_title))
+                .setMessage(getString(R.string.alert_remove_all_body))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mMap.clear();
+                        mDb.pinsDao().nukeTable();
+                        mDb.flickrImagesDao().nukeTable();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void signOut() {
@@ -76,24 +94,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                // Creating a marker
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                // Setting the position for the marker
-                markerOptions.position(latLng);
-
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
-
-                // Clears the previously touched position
-                //    mMap.clear();
-
-                // Animating to the touched position
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Placing a marker on the touched position
-                mMap.addMarker(markerOptions);
+                addPinToMap(latLng);
+                addPinToDatabase(latLng);
             }
         });
 
@@ -102,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onMapClick(LatLng latLng) {
                 Toast.makeText(MapsActivity.this,
-                        "Long press on map for drop a PIN",
+                        getString(R.string.long_press_information),
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -114,8 +116,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         String.valueOf(marker.getPosition().latitude) +
                         String.valueOf(marker.getPosition().longitude),
                         Toast.LENGTH_SHORT).show();
+                List<Double> coordinate = new ArrayList<>();
+                coordinate.add(marker.getPosition().latitude);
+                coordinate.add(marker.getPosition().longitude);
+                new FlickrNetwork().execute((Runnable) coordinate);
                 return false;
             }
         });
+    }
+
+    private void addPinToMap(LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.addMarker(markerOptions);
+    }
+
+    private void addPinToDatabase(LatLng latLng) {
+        Long timeStamp = System.currentTimeMillis()/1000;
+        Pin pin = new Pin(timeStamp, latLng.latitude, latLng.longitude);
+        mDb.pinsDao().insertPin(pin);
     }
 }

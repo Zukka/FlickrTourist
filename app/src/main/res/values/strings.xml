@@ -13,4 +13,7 @@
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="title_activity_maps">Map</string>
     <string name="clear_pins">Clear PINS</string>
+    <string name="long_press_information">Long press on the map for drop a PIN</string>
+    <string name="alert_remove_all_title">Delete Pins</string>
+    <string name="alert_remove_all_body">Are you sure you want to remove all pins ansd stored images?</string>
 </resources>
