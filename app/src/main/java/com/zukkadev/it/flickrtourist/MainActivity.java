@@ -1,5 +1,6 @@
 package com.zukkadev.it.flickrtourist;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private FirebaseAuth mAuth;
+    public static FirebaseAuth mAuth;
     public static final String TAG = "Flickr Tourist";
     private TextView mStatusTextView;
     private TextView mDetailTextView;
@@ -79,11 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(null);
-    }
-
     private void signIn(String email, String password) {
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
@@ -106,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // ...
+                        showMapActivity();
                     }
                 });
     }
@@ -193,10 +188,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.email_sign_in_button) {
             signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.sign_out_button) {
-            signOut();
         } else if (i == R.id.verify_email_button) {
             sendEmailVerification();
         }
+    }
+
+    private void showMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
     }
 }
