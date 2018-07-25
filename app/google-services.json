@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "959034038076",
+    "firebase_url": "https://flickrtourist.firebaseio.com",
+    "project_id": "flickrtourist",
+    "storage_bucket": "flickrtourist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959034038076:android:8dece2c4abb936ac",
+        "android_client_info": {
+          "package_name": "com.zukkadev.it.flickrtourist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959034038076-kipn42utsb6569gd5s0m0usku74h9igv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zukkadev.it.flickrtourist",
+            "certificate_hash": "7db316b52a6f42aa4d2f21fc3b27742c587ec77f"
+          }
+        },
+        {
+          "client_id": "959034038076-33a9vlc05h2pblq4fn7ch4pj9s25upt6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbdDNYShty-TgqOh-2u7rg93cBDvZjuUo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959034038076-33a9vlc05h2pblq4fn7ch4pj9s25upt6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
