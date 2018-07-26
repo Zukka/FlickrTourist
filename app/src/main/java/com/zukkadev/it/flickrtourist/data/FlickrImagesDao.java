@@ -22,7 +22,7 @@ public interface FlickrImagesDao {
     List<FlickrImages> retrieveImage(int imageID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertImage(FlickrImages step);
+    void insertImage(FlickrImages flickrImage);
 
     @Query("DELETE FROM flickr_images")
     void nukeTable();

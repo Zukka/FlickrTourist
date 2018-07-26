@@ -39,7 +39,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".ImagesActivity" />
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".DetailActivity"/>
     </application>
 
 </manifest>

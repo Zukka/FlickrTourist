@@ -1,6 +1,7 @@
 package com.zukkadev.it.flickrtourist.utils;
 
 public class FlickrResponseKeys {
+    public static String Id = "id";
     public static String Status = "stat";
     public static String Photos = "photos";
     public static String Photo = "photo";

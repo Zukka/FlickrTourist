@@ -44,6 +44,9 @@ public class ImagesActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         new FlickrRequest().execute(bundle);
+
+        imagesRecyclerViewAdapter = new ImagesRecyclerViewAdapter(this);
+        imagesRecyclerView.setAdapter(imagesRecyclerViewAdapter);
     }
 
     private void isProgressBarVisible(boolean isVisible) {
@@ -72,6 +75,9 @@ public class ImagesActivity extends AppCompatActivity {
                 try {
                     String jsonResponse = NetworkUtils.getResponseFromHttpUrl(imagesRequestURL);
                     List<FlickrImages> flickrImagesList = FlickrJsonUtils.getFlickrImagesFromJson(jsonResponse);
+                    for (FlickrImages image: flickrImagesList) {
+                        mDb.flickrImagesDao().insertImage(image);
+                    }
                     return flickrImagesList;
                 } catch (Exception e) {
                     return null;
@@ -84,7 +90,8 @@ public class ImagesActivity extends AppCompatActivity {
             isProgressBarVisible(false);
             if (flickrImages != null && flickrImages.size() > 0) {
                 imagesRecyclerView.setVisibility(View.VISIBLE);
-
+                imagesRecyclerViewAdapter.setFilmData(flickrImages);
+                imagesRecyclerView.setAdapter(imagesRecyclerViewAdapter);
             }
             else
                 Toast.makeText(ImagesActivity.this, getString(R.string.loadImagesFailed), Toast.LENGTH_LONG).show();
