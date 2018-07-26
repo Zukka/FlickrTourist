@@ -1,6 +1,7 @@
 package com.zukkadev.it.flickrtourist;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,10 +18,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zukkadev.it.flickrtourist.data.AppDatabase;
 import com.zukkadev.it.flickrtourist.model.Pin;
-import com.zukkadev.it.flickrtourist.network.FlickrNetwork;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.support.v7.app.AlertDialog.*;
 
@@ -94,8 +91,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                addPinToMap(latLng);
-                addPinToDatabase(latLng);
+                Long timeStamp = System.currentTimeMillis()/1000;
+                addPinToMap(latLng,timeStamp);
+                addPinToDatabase(latLng, timeStamp);
             }
         });
 
@@ -116,25 +114,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         String.valueOf(marker.getPosition().latitude) +
                         String.valueOf(marker.getPosition().longitude),
                         Toast.LENGTH_SHORT).show();
-                List<Double> coordinate = new ArrayList<>();
-                coordinate.add(marker.getPosition().latitude);
-                coordinate.add(marker.getPosition().longitude);
-                new FlickrNetwork().execute((Runnable) coordinate);
+                Intent intent = new Intent(MapsActivity.this, ImagesActivity.class);
+                intent.putExtra (getString(R.string.marker_title),marker.getTitle());
+                intent.putExtra (getString(R.string.latitude),marker.getPosition().latitude);
+                intent.putExtra (getString(R.string.longitude),marker.getPosition().longitude);
+
                 return false;
             }
         });
     }
 
-    private void addPinToMap(LatLng latLng) {
+    private void addPinToMap(LatLng latLng, Long timeStamp) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+        markerOptions.title(String.valueOf(timeStamp));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.addMarker(markerOptions);
     }
 
-    private void addPinToDatabase(LatLng latLng) {
-        Long timeStamp = System.currentTimeMillis()/1000;
+    private void addPinToDatabase(LatLng latLng, Long timeStamp) {
         Pin pin = new Pin(timeStamp, latLng.latitude, latLng.longitude);
         mDb.pinsDao().insertPin(pin);
     }

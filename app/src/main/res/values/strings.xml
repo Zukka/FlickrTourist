@@ -16,4 +16,7 @@
     <string name="long_press_information">Long press on the map for drop a PIN</string>
     <string name="alert_remove_all_title">Delete Pins</string>
     <string name="alert_remove_all_body">Are you sure you want to remove all pins ansd stored images?</string>
+    <string name="marker_title">MarkerTitle</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>

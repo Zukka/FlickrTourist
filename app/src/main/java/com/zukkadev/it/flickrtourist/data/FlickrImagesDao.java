@@ -16,6 +16,9 @@ public interface FlickrImagesDao {
     List<FlickrImages> getAllImages();
 
     @Query("SELECT * FROM flickr_images WHERE image_id = :imageID")
+    List<FlickrImages> retrieveImages(long imageID);
+
+    @Query("SELECT * FROM flickr_images WHERE image_id = :imageID")
     List<FlickrImages> retrieveImage(int imageID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
