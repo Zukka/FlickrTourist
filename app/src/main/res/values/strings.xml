@@ -19,4 +19,5 @@
     <string name="marker_title">MarkerTitle</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="loadImagesFailed">Error: load images failed!</string>
 </resources>

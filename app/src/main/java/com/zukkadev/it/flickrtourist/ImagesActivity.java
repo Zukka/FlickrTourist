@@ -1,6 +1,5 @@
 package com.zukkadev.it.flickrtourist;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -8,12 +7,15 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.zukkadev.it.flickrtourist.data.AppDatabase;
 import com.zukkadev.it.flickrtourist.model.FlickrImages;
+import com.zukkadev.it.flickrtourist.network.FlickrJsonUtils;
 import com.zukkadev.it.flickrtourist.network.NetworkUtils;
+import com.zukkadev.it.flickrtourist.utils.Constants;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ import java.util.List;
 public class ImagesActivity extends AppCompatActivity {
 
     private RecyclerView imagesRecyclerView;
-  //  private ImageRecycleViewAdapter imageRecycleViewAdapter;
+    private ImagesRecyclerViewAdapter imagesRecyclerViewAdapter;
     private GridLayoutManager gridLayoutManager;
     private ProgressBar loadingDataProgressBar;
     private AppDatabase mDb;
@@ -40,27 +42,52 @@ public class ImagesActivity extends AppCompatActivity {
         imagesRecyclerView.setLayoutManager(gridLayoutManager);
         imagesRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        List<Long> imageStartData = new ArrayList<>();
-
-        Intent intent = new Intent();
-        imageStartData.add(intent.getLongExtra(getString(R.string.marker_title), 0));
-        imageStartData.add(intent.getLongExtra(getString(R.string.latitude), 0));
-        imageStartData.add(intent.getLongExtra(getString(R.string.longitude), 0));
-        new FlickrRequest().execute(imageStartData);
+        Bundle bundle = getIntent().getExtras();
+        new FlickrRequest().execute(bundle);
     }
 
-    public class FlickrRequest extends AsyncTask<List<Long>, Void, List<FlickrImages>> {
+    private void isProgressBarVisible(boolean isVisible) {
+        if (isVisible)
+            loadingDataProgressBar.setVisibility(View.VISIBLE);
+        else
+            loadingDataProgressBar.setVisibility((View.GONE));
+    }
+
+    public class FlickrRequest extends AsyncTask<Bundle, Void, List<FlickrImages>> {
 
         @Override
-        protected List<FlickrImages> doInBackground(List<Long>... lists) {
-            long marker = lists[0].get(0);
+        protected void onPreExecute() {
+            super.onPreExecute();
+            isProgressBarVisible(true);
+        }
+
+        @Override
+        protected List<FlickrImages> doInBackground(Bundle... bundles) {
+            long marker = bundles[0].getLong(Constants.Pin);
             List<FlickrImages> imagesData = mDb.flickrImagesDao().retrieveImages(marker);
-            if (imagesData != null && imagesData.size() > 0) {
+            if (imagesData != null && imagesData.size() > 0)
                return imagesData;
-            } else {
-                URL imagesRequestURL = NetworkUtils.buildRequestImagesUrl(lists[0].get(1), lists[0].get(2));
+            else {
+                URL imagesRequestURL = NetworkUtils.buildRequestPhotosUrl(bundles[0].getDouble(Constants.Latitude), bundles[0].getDouble(Constants.Longitude));
+                try {
+                    String jsonResponse = NetworkUtils.getResponseFromHttpUrl(imagesRequestURL);
+                    List<FlickrImages> flickrImagesList = FlickrJsonUtils.getFlickrImagesFromJson(jsonResponse);
+                    return flickrImagesList;
+                } catch (Exception e) {
+                    return null;
+                }
             }
-            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<FlickrImages> flickrImages) {
+            isProgressBarVisible(false);
+            if (flickrImages != null && flickrImages.size() > 0) {
+                imagesRecyclerView.setVisibility(View.VISIBLE);
+
+            }
+            else
+                Toast.makeText(ImagesActivity.this, getString(R.string.loadImagesFailed), Toast.LENGTH_LONG).show();
         }
     }
 }

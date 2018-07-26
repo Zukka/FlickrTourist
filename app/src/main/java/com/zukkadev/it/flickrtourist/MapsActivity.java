@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.zukkadev.it.flickrtourist.data.AppDatabase;
 import com.zukkadev.it.flickrtourist.model.Pin;
+import com.zukkadev.it.flickrtourist.utils.Constants;
 
 import static android.support.v7.app.AlertDialog.*;
 
@@ -119,9 +120,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         String.valueOf(marker.getPosition().longitude),
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MapsActivity.this, ImagesActivity.class);
-                intent.putExtra (getString(R.string.marker_title),marker.getTitle());
-                intent.putExtra (getString(R.string.latitude),marker.getPosition().latitude);
-                intent.putExtra (getString(R.string.longitude),marker.getPosition().longitude);
+                intent.putExtra (Constants.Pin,marker.getTitle());
+                intent.putExtra (Constants.Latitude,marker.getPosition().latitude);
+                intent.putExtra (Constants.Longitude,marker.getPosition().longitude);
                 startActivity(intent);
                 return false;
             }
