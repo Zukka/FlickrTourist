@@ -13,7 +13,9 @@ import android.widget.ProgressBar;
 
 import com.zukkadev.it.flickrtourist.data.AppDatabase;
 import com.zukkadev.it.flickrtourist.model.FlickrImages;
+import com.zukkadev.it.flickrtourist.network.NetworkUtils;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,10 +55,10 @@ public class ImagesActivity extends AppCompatActivity {
         protected List<FlickrImages> doInBackground(List<Long>... lists) {
             long marker = lists[0].get(0);
             List<FlickrImages> imagesData = mDb.flickrImagesDao().retrieveImages(marker);
-            if (imagesData != null) {
-                // return stored images
+            if (imagesData != null && imagesData.size() > 0) {
+               return imagesData;
             } else {
-                // request new images
+                URL imagesRequestURL = NetworkUtils.buildRequestImagesUrl(lists[0].get(1), lists[0].get(2));
             }
             return null;
         }

@@ -2,6 +2,7 @@ package com.zukkadev.it.flickrtourist;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,10 +26,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private AppDatabase mDb;
     private GoogleMap mMap;
+    private Pin pin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -92,8 +96,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onMapLongClick(LatLng latLng) {
                 Long timeStamp = System.currentTimeMillis()/1000;
-                addPinToMap(latLng,timeStamp);
                 addPinToDatabase(latLng, timeStamp);
+                addPinToMap(latLng,timeStamp);
             }
         });
 
@@ -118,7 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 intent.putExtra (getString(R.string.marker_title),marker.getTitle());
                 intent.putExtra (getString(R.string.latitude),marker.getPosition().latitude);
                 intent.putExtra (getString(R.string.longitude),marker.getPosition().longitude);
-
+                startActivity(intent);
                 return false;
             }
         });
@@ -133,7 +137,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void addPinToDatabase(LatLng latLng, Long timeStamp) {
-        Pin pin = new Pin(timeStamp, latLng.latitude, latLng.longitude);
-        mDb.pinsDao().insertPin(pin);
+        pin = new Pin(timeStamp, latLng.latitude, latLng.longitude);
+        new AddPinToDatabase().execute(pin);
+    }
+
+
+    public class AddPinToDatabase extends AsyncTask<Pin, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Pin... pins) {
+
+            try {
+                mDb.pinsDao().insertPin(pins[0]);
+                return true;
+            } catch (Exception e){
+                return false;
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "pins")
+@Entity(tableName = "pin")
 public class Pin {
 
     @PrimaryKey(autoGenerate = true)

@@ -1,15 +1,15 @@
 package com.zukkadev.it.flickrtourist.utils;
 
 public class FlickrParameterKeys {
-    static String Method = "method";
-    static String APIKey = "api_key";
-    static String GalleryID = "gallery_id";
-    static String Extras = "extras";
-    static String Format = "format";
-    static String NoJSONCallback = "nojsoncallback";
-    static String SafeSearch = "safe_search";
-    static String Text = "text";
-    static String BoundingBox = "bbox";
-    static String Page = "page";
-    static String PerPages = "per_page";
+    public static String Method = "method";
+    public static String APIKey = "api_key";
+    public static String GalleryID = "gallery_id";
+    public static String Extras = "extras";
+    public static String Format = "format";
+    public static String NoJSONCallback = "nojsoncallback";
+    public static String SafeSearch = "safe_search";
+    public static String Text = "text";
+    public static String BoundingBox = "bbox";
+    public static String Page = "page";
+    public static String PerPages = "per_page";
 }

@@ -1,11 +1,11 @@
 package com.zukkadev.it.flickrtourist.utils;
 
 public class FlickrResponseKeys {
-    static String Status = "stat";
-    static String Photos = "photos";
-    static String Photo = "photo";
-    static String Title = "title";
-    static String MediumURL = "url_m";
-    static String Pages = "pages";
-    static String Total = "total";
+    public static String Status = "stat";
+    public static String Photos = "photos";
+    public static String Photo = "photo";
+    public static String Title = "title";
+    public static String MediumURL = "url_m";
+    public static String Pages = "pages";
+    public static String Total = "total";
 }
