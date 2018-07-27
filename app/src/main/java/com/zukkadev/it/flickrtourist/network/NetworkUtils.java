@@ -17,7 +17,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class NetworkUtils {
-    public static URL buildRequestPhotosUrl(double latitude, double longitude) {
+    public static URL buildRequestPhotosUrl(double latitude, double longitude, String page) {
         String baseURL = FlickrConstants.APIScheme + FlickrConstants.APIHost + FlickrConstants.APIPath;
         Uri builtUri = Uri.parse(baseURL).buildUpon()
                 .appendQueryParameter(FlickrParameterKeys.Method, FlickrParameterValues.SearchMethod)
@@ -26,6 +26,8 @@ public class NetworkUtils {
                 .appendQueryParameter(FlickrParameterKeys.BoundingBox, bboxString(latitude, longitude))
                 .appendQueryParameter(FlickrParameterKeys.Format, FlickrParameterValues.ResponseFormat)
                 .appendQueryParameter(FlickrParameterKeys.NoJSONCallback, FlickrParameterValues.DisableJSONCallback)
+                .appendQueryParameter(FlickrParameterKeys.PerPages, FlickrParameterValues.PerPages)
+                .appendQueryParameter(FlickrParameterKeys.Page, page)
                 .build();
 
         URL url = null;

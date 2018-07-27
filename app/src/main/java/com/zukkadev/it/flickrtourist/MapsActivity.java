@@ -115,14 +115,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(MapsActivity.this,
-                        String.valueOf(marker.getPosition().latitude) +
-                        String.valueOf(marker.getPosition().longitude),
-                        Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MapsActivity.this, ImagesActivity.class);
-                intent.putExtra (Constants.Pin,marker.getTitle());
-                intent.putExtra (Constants.Latitude,marker.getPosition().latitude);
-                intent.putExtra (Constants.Longitude,marker.getPosition().longitude);
+                Bundle bundle = new Bundle();
+                bundle.putString (Constants.Pin,marker.getTitle());
+                bundle.putDouble (Constants.Latitude,marker.getPosition().latitude);
+                bundle.putDouble (Constants.Longitude,marker.getPosition().longitude);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 return false;
             }

@@ -48,7 +48,6 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
             @Override
             public void onClick(View v) {
                 Intent intentShowDetails = new Intent(mContext, DetailActivity.class);
-             //   intentShowDetails.putExtra("film", image);
                 mContext.startActivity(intentShowDetails);
             }
         });
@@ -60,8 +59,8 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
         return mImageData.size();
     }
 
-    public void setFilmData(List<FlickrImages> filmData) {
-        mImageData = filmData;
+    public void setImageData(List<FlickrImages> imageData) {
+        mImageData = imageData;
         notifyDataSetChanged();
     }
 }
