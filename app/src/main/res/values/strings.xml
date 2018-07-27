@@ -20,4 +20,5 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="loadImagesFailed">Error: load images failed!</string>
+    <string name="reset_error">Error: reset database data failed!</string>
 </resources>

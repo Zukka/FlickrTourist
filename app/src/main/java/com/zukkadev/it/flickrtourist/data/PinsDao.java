@@ -22,6 +22,6 @@ public interface PinsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPin(Pin pin);
 
-    @Query("DELETE FROM flickr_images")
+    @Query("DELETE FROM pin")
     void nukeTable();
 }

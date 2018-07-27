@@ -21,6 +21,8 @@ import com.zukkadev.it.flickrtourist.data.AppDatabase;
 import com.zukkadev.it.flickrtourist.model.Pin;
 import com.zukkadev.it.flickrtourist.utils.Constants;
 
+import java.util.List;
+
 import static android.support.v7.app.AlertDialog.*;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
@@ -38,6 +40,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        new RestorePinFromDatabase().execute();
     }
 
     @Override
@@ -71,8 +83,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mMap.clear();
-                        mDb.pinsDao().nukeTable();
-                        mDb.flickrImagesDao().nukeTable();
+                        new ResetAllData().execute();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -140,7 +151,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         new AddPinToDatabase().execute(pin);
     }
 
-
     public class AddPinToDatabase extends AsyncTask<Pin, Void, Boolean> {
 
         @Override
@@ -152,6 +162,51 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (Exception e){
                 return false;
             }
+        }
+    }
+
+    public class RestorePinFromDatabase extends AsyncTask<Pin, Void, List<Pin>> {
+
+        @Override
+        protected List<Pin> doInBackground(Pin... pins) {
+            try {
+                List<Pin> restoredPin = mDb.pinsDao().getAllPins();
+                return restoredPin;
+            } catch (Exception e){
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Pin> pins) {
+            if (pins != null && pins.size() > 0) {
+                for (Pin restoredPin: pins) {
+                    LatLng pinLatLng = new LatLng(restoredPin.getPinLatitude(),restoredPin.getPinLongitude());
+                    addPinToMap(pinLatLng, restoredPin.getPinID());
+                }
+            }
+        }
+    }
+
+    public class ResetAllData extends AsyncTask<Pin,Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Pin... pins) {
+            try {
+                mDb.pinsDao().nukeTable();
+                mDb.flickrImagesDao().nukeTable();
+                return true;
+            } catch (Exception e){
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isReset) {
+            if(!isReset)
+                Toast.makeText(MapsActivity.this,
+                        getString(R.string.reset_error),
+                        Toast.LENGTH_SHORT).show();
         }
     }
 }
