@@ -21,4 +21,12 @@
     <string name="longitude">Longitude</string>
     <string name="loadImagesFailed">Error: load images failed!</string>
     <string name="reset_error">Error: reset database data failed!</string>
+    <string name="text_placeholder">Place holder</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="noWidgetImage">No favorite Image</string>
+    <string name="action_fav">Set as favorite image</string>
+    <string name="action_detail">Tap to open image details</string>
+    <string name="ask_favorite_body">Set as favorite and widget image?</string>
 </resources>

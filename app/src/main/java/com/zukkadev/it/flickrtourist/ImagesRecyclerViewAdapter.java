@@ -2,6 +2,7 @@ package com.zukkadev.it.flickrtourist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.zukkadev.it.flickrtourist.model.FlickrImages;
+import com.zukkadev.it.flickrtourist.utils.Constants;
 
 import java.util.List;
 
@@ -48,6 +50,10 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
             @Override
             public void onClick(View v) {
                 Intent intentShowDetails = new Intent(mContext, DetailActivity.class);
+                Bundle imageBundle = new Bundle();
+                imageBundle.putString (Constants.Title, image.getImageTitle());
+                imageBundle.putString(Constants.URL, image.getImageURL());
+                intentShowDetails.putExtras(imageBundle);
                 mContext.startActivity(intentShowDetails);
             }
         });

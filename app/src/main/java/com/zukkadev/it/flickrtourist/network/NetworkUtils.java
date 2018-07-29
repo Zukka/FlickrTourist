@@ -18,6 +18,7 @@ import static java.lang.Math.min;
 
 public class NetworkUtils {
     public static URL buildRequestPhotosUrl(double latitude, double longitude, String page) {
+        System.out.println("**** PAGE: " + page);
         String baseURL = FlickrConstants.APIScheme + FlickrConstants.APIHost + FlickrConstants.APIPath;
         Uri builtUri = Uri.parse(baseURL).buildUpon()
                 .appendQueryParameter(FlickrParameterKeys.Method, FlickrParameterValues.SearchMethod)

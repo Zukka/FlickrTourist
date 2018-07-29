@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "959034038076-k13pv9lrall33f0mhpd88fvdmeoreeuu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zukkadev.it.flickrtourist",
+            "certificate_hash": "a44ea66d466bfb37c838f2ff40d0c270522090aa"
+          }
+        },
+        {
           "client_id": "959034038076-33a9vlc05h2pblq4fn7ch4pj9s25upt6.apps.googleusercontent.com",
           "client_type": 3
         }

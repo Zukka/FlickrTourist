@@ -1,6 +1,9 @@
 package com.zukkadev.it.flickrtourist;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -98,6 +101,7 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
                 try {
                     String jsonResponse = NetworkUtils.getResponseFromHttpUrl(imagesRequestURL);
                     List<FlickrImages> flickrImagesList = FlickrJsonUtils.getFlickrImagesFromJson(ImagesActivity.this, jsonResponse, Long.valueOf(marker));
+
                     return flickrImagesList;
                 } catch (Exception e) {
                     return null;
@@ -108,6 +112,7 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
         @Override
         protected void onPostExecute(List<FlickrImages> flickrImages) {
             mSwipeRefreshLayout.setRefreshing(false);
+            isRefreshing = false;
             if (flickrImages != null && flickrImages.size() > 0) {
                 imagesRecyclerViewAdapter = new ImagesRecyclerViewAdapter(ImagesActivity.this);
                 imagesRecyclerView.setVisibility(View.VISIBLE);

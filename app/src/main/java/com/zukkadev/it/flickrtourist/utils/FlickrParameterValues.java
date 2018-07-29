@@ -2,7 +2,7 @@ package com.zukkadev.it.flickrtourist.utils;
 
 public class FlickrParameterValues {
     public static String SearchMethod = "flickr.photos.search";
-    public static String APIKey = "YOUR_KEY";
+    public static String APIKey = "YOUR_API_KEY";
     public static String ResponseFormat = "json";
     public static String DisableJSONCallback = "1"; /* 1 means "yes" */
     public static String GalleryPhotosMethod = "flickr.galleries.getPhotos";
