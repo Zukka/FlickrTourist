@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static FirebaseAuth mAuth;
-    public static final String TAG = "Flickr Tourist";
     private TextView mStatusTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
         }
@@ -63,13 +61,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, getString(R.string.auth_failed),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -80,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
@@ -90,15 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                         //   updateUI(user);
                             showMapActivity();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, getString(R.string.auth_failed),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -107,34 +97,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendEmailVerification() {
-        // Disable button
         findViewById(R.id.verify_email_button).setEnabled(false);
 
-        // Send verification email
-        // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        // Re-enable button
                         findViewById(R.id.verify_email_button).setEnabled(true);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(MainActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
+                                    getString(R.string.verification_mail_send_ok)+ " " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(MainActivity.this,
-                                    "Failed to send verification email.",
+                                    getString(R.string.verification_mail_send_fail),
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END send_email_verification]
     }
 
     private boolean validateForm() {

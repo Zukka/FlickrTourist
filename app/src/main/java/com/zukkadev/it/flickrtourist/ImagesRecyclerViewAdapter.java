@@ -61,7 +61,7 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
 
     @Override
     public int getItemCount() {
-        if (null == mImageData) return 0;
+        if (mImageData == null) return 0;
         return mImageData.size();
     }
 

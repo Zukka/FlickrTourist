@@ -29,4 +29,7 @@
     <string name="action_fav">Set as favorite image</string>
     <string name="action_detail">Tap to open image details</string>
     <string name="ask_favorite_body">Set as favorite and widget image?</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="verification_mail_send_ok">Verification email sent to </string>
+    <string name="verification_mail_send_fail">Failed to send verification email.</string>
 </resources>
