@@ -1,10 +1,13 @@
 package com.zukkadev.it.flickrtourist;
 
 import android.appwidget.AppWidgetManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +36,7 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
     private Bundle bundle;
     public static String downloadedPage = "0";
     private boolean isRefreshing = false;
+    private List<FlickrImages> storedImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
 
         imagesRecyclerViewAdapter = new ImagesRecyclerViewAdapter(this);
         imagesRecyclerView.setAdapter(imagesRecyclerViewAdapter);
+        retrieveFlickrImages();
     }
 
     @Override
@@ -82,6 +87,17 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
         new FlickrRequest().execute(bundle);
     }
 
+
+    private void retrieveFlickrImages() {
+        LiveData<List<FlickrImages>> retrieveImages = mDb.flickrImagesDao().retrieveImages(Long.valueOf(bundle.getString(Constants.Pin)));
+        retrieveImages.observe(this, new Observer<List<FlickrImages>>() {
+            @Override
+            public void onChanged(@Nullable List<FlickrImages> retrieveImagesList) {
+                storedImages = retrieveImagesList;
+            }
+        });
+    }
+
     public class FlickrRequest extends AsyncTask<Bundle, Void, List<FlickrImages>> {
 
         @Override
@@ -93,9 +109,8 @@ public class ImagesActivity extends AppCompatActivity implements SwipeRefreshLay
         @Override
         protected List<FlickrImages> doInBackground(Bundle... bundles) {
             String marker = bundles[0].getString(Constants.Pin);
-            List<FlickrImages> imagesData = mDb.flickrImagesDao().retrieveImages(Long.valueOf(marker));
-            if (imagesData != null && imagesData.size() > 0 && !isRefreshing)
-               return imagesData;
+            if (storedImages != null && storedImages.size() > 0 && !isRefreshing)
+               return storedImages;
             else {
                 URL imagesRequestURL = NetworkUtils.buildRequestPhotosUrl(bundles[0].getDouble(Constants.Latitude), bundles[0].getDouble(Constants.Longitude), downloadedPage);
                 try {

@@ -1,5 +1,6 @@
 package com.zukkadev.it.flickrtourist.data;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -13,10 +14,10 @@ import java.util.List;
 public interface FlickrImagesDao {
 
     @Query("SELECT * FROM flickr_images")
-    List<FlickrImages> getAllImages();
+    LiveData<List<FlickrImages>> getAllImages();
 
     @Query("SELECT * FROM flickr_images WHERE image_id = :imageID")
-    List<FlickrImages> retrieveImages(long imageID);
+    LiveData<List<FlickrImages>> retrieveImages(long imageID);
 
     @Query("SELECT * FROM flickr_images WHERE image_id = :imageID")
     List<FlickrImages> retrieveImage(int imageID);

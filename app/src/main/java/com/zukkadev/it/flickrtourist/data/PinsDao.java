@@ -1,6 +1,7 @@
 package com.zukkadev.it.flickrtourist.data;
 
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface PinsDao {
 
     @Query("SELECT * FROM Pin")
-    List<Pin> getAllPins();
+    LiveData<List<Pin>> getAllPins();
 
     @Query("SELECT * FROM Pin WHERE pin_id = :pinID")
     List<Pin> retrievePin(int pinID);

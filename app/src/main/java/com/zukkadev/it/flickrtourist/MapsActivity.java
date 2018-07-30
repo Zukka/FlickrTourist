@@ -1,10 +1,13 @@
 package com.zukkadev.it.flickrtourist;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,12 +43,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        new RestorePinFromDatabase().execute();
+        retrievePins();
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        new RestorePinFromDatabase().execute();
+    private void retrievePins() {
+        LiveData<List<Pin>> restoredPin = mDb.pinsDao().getAllPins();
+        restoredPin.observe(this, new Observer<List<Pin>>() {
+            @Override
+            public void onChanged(@Nullable List<Pin> restoredPins) {
+                for (Pin restoredPin: restoredPins) {
+                    LatLng pinLatLng = new LatLng(restoredPin.getPinLatitude(), restoredPin.getPinLongitude());
+                    addPinToMap(pinLatLng, restoredPin.getPinID());
+                }
+            }
+        });
     }
 
     @Override
@@ -157,29 +168,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
             } catch (Exception e){
                 return false;
-            }
-        }
-    }
-
-    public class RestorePinFromDatabase extends AsyncTask<Pin, Void, List<Pin>> {
-
-        @Override
-        protected List<Pin> doInBackground(Pin... pins) {
-            try {
-                List<Pin> restoredPin = mDb.pinsDao().getAllPins();
-                return restoredPin;
-            } catch (Exception e){
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Pin> pins) {
-            if (pins != null && pins.size() > 0) {
-                for (Pin restoredPin: pins) {
-                    LatLng pinLatLng = new LatLng(restoredPin.getPinLatitude(),restoredPin.getPinLongitude());
-                    addPinToMap(pinLatLng, restoredPin.getPinID());
-                }
             }
         }
     }
