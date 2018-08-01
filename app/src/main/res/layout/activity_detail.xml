@@ -54,7 +54,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/selected_image"/>
         </LinearLayout>
     </ScrollView>
 

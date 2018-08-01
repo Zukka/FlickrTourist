@@ -32,4 +32,6 @@
     <string name="auth_failed">Authentication failed.</string>
     <string name="verification_mail_send_ok">Verification email sent to </string>
     <string name="verification_mail_send_fail">Failed to send verification email.</string>
+    <string name="selected_image">Selected image</string>
+    <string name="widgetImage">Flickr Tourist widget image</string>
 </resources>
